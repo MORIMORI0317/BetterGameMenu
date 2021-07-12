@@ -1,0 +1,13 @@
+modLoader = "javafml"
+loaderVersion = "[36,)"
+license = "LGPL v3"
+[[mods]]
+modId = "bettergamemenu"
+version = "${file.jarVersion}"
+displayName = "Better Game Menu"
+logoFile = "logo.png"
+authors = "MORIMORI0317"
+description = '''
+This mod makes the game menu even better
+Very Ikisugi Game Menu!
+'''
