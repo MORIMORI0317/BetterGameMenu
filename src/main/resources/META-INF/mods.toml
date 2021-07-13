@@ -5,6 +5,7 @@ license = "LGPL v3"
 modId = "bettergamemenu"
 version = "${file.jarVersion}"
 displayName = "Better Game Menu"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/better-game-menu"
 logoFile = "logo.png"
 authors = "MORIMORI0317"
 description = '''
