@@ -1,13 +1,13 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "net.morimori.bettergamemenu.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "refmap": "bettergamemenu.refmap.json",
+  "compatibilityLevel": "JAVA_16",
   "client": [
-    "ScreenMixin"
+    "MinecraftMixin",
+    "ModMenuEventHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "minVersion": "0.8"
+  }
 }
