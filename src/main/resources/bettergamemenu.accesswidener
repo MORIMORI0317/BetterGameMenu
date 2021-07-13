@@ -1,0 +1,3 @@
+accessWidener	v1	named
+accessible field net/minecraft/server/MinecraftServer storageSource Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;
+accessible field net/minecraft/client/gui/screens/PauseScreen showPauseMenu Z

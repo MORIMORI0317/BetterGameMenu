@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "bettergamemenu",
+  "version": "${version}",
+  "name": "Better Game Menu",
+  "description": "This mod makes the game menu even better\nVery Ikisugi Game Menu!",
+  "authors": [
+    "MORIMORI0317"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/better-game-menu",
+    "sources": "https://github.com/MORIMORI0317/BetterGameMenu"
+  },
+  "license": "LGPL v3",
+  "icon": "assets/bettergamemenu/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.morimori.bettergamemenu.BetterGameMenu"
+    ],
+    "modmenu": [
+      "net.morimori.bettergamemenu.integration.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "bettergamemenu.mixins.json"
+  ],
+  "accessWidener": "bettergamemenu.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16"
+  }
+}

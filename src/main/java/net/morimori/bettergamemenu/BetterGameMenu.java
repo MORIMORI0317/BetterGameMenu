@@ -1,21 +1,16 @@
 package net.morimori.bettergamemenu;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import net.fabricmc.api.ClientModInitializer;
 
 //Add translation by Eric-01. Thank You!
-@Mod(BetterGameMenu.MODID)
-public class BetterGameMenu {
+public class BetterGameMenu implements ClientModInitializer {
     public static final String MODID = "bettergamemenu";
+    public static BGMConfig CONFIG;
 
-    public BetterGameMenu() {
-        ClientConfig.init();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-    }
-
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(ClientHandler.class);
+    @Override
+    public void onInitializeClient() {
+        CONFIG = AutoConfig.register(BGMConfig.class, Toml4jConfigSerializer::new).getConfig();
     }
 }

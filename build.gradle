@@ -1,116 +1,77 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/maven' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
+plugins {
+	id 'fabric-loom' version '0.7-SNAPSHOT'
+	id 'maven-publish'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 
-version = "${mod_version}"
-group = "${mod_group}"
-archivesBaseName = "${mod_name}-${mc_version}"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}"
+version = project.mod_version
+group = project.maven_group
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+repositories {
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url = "https://jitpack.io" }
+}
 minecraft {
+	accessWidener = file("src/main/resources/bettergamemenu.accesswidener")
+}
+dependencies {
 
-    mappings channel: 'official', version: '1.16.5'
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    runs {
-        client {
-            workingDirectory project.file('run')
-            arg "-mixin.config=bettergamemenu.mixins.json"
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings minecraft.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-            property 'forge.logging.markers', 'REGISTRIES'
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-            property 'forge.logging.console.level', 'debug'
+	modImplementation "io.github.prospector:modmenu:1.16.9"
 
-            mods {
-                bettergamemenu {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-            arg "-mixin.config=bettergamemenu.mixins.json"
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                bettergamemenu {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', 'bettergamemenu', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                bettergamemenu {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+	modImplementation include("me.shedaniel.cloth:cloth-config-fabric:4.11.26") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+processResources {
+	inputs.property "version", project.version
 
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.32'
-    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
 
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+
+	def targetVersion = 8
+	if (JavaVersion.current().isJava9Compatible()) {
+		 it.options.release = targetVersion
+	}
+}
+
+java {
+	withSourcesJar()
 }
 
 jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : "${mod_name}",
-                "Specification-Vendor"    : "${mod_vendor}",
-                "Specification-Version"   : "1",
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "${mod_vendor}",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs"            : "bettergamemenu.mixins.json"
-        ])
-    }
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
 }
 
-jar.finalizedBy('reobfJar')
-
-mixin {
-    add sourceSets.main, "bettergamemenu.refmap.json"
-}
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
+	publications {
+		mavenJava(MavenPublication) {
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	repositories {
+
+	}
 }

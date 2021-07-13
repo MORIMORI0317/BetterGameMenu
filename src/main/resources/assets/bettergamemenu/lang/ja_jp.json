@@ -1,3 +1,8 @@
 {
-  "menu.modoption": "Mod 設定..."
+  "menu.modoption": "Mod 設定...",
+  "text.autoconfig.bettergamemenu.option.enableModOptions": "MOD設定ボタンを有効にする",
+  "text.autoconfig.bettergamemenu.option.enableRFARB": "フィードバック、バグを報告ボタンを削除する",
+  "text.autoconfig.bettergamemenu.option.enableHideUnnecessaryShareToLan": "無効なLANに公開ボタンを隠す",
+  "text.autoconfig.bettergamemenu.option.enableRejoinButton": "再参加ボタンを有効にする",
+  "text.autoconfig.bettergamemenu.option.enableModMenuCompat": "Mod Menuとの互換性"
 }
