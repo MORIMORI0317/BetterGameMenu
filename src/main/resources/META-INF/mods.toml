@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[36,)"
+loaderVersion = "[37,)"
 license = "LGPL v3"
 [[mods]]
 modId = "bettergamemenu"
