@@ -1,3 +1,6 @@
 {
-  "menu.modoption": "Mod Options..."
+  "menu.modoption": "Mod Options...",
+  "gui.button.rejoin": "Re join",
+  "narrator.button.lastjoinsingleplay": "Last Join Single Play",
+  "narrator.button.lastjoinmultiplay": "Last Join Multi Play"
 }

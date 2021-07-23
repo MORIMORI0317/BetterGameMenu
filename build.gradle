@@ -10,4 +10,6 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-
+minecraft {
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+}
