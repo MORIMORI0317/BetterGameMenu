@@ -10,4 +10,5 @@ public class BGMConfig implements ConfigData {
     public boolean enableHideUnnecessaryShareToLan = true;
     public boolean enableRejoinButton = true;
     public boolean enableModMenuCompat = true;
+    public boolean enableJoinLastWorldButton = true;
 }

@@ -1,4 +1,4 @@
-package net.morimori.bettergamemenu;
+package net.morimori.bettergamemenu.gui;
 
 import com.mojang.realmsclient.RealmsMainScreen;
 import net.fabricmc.loader.api.FabricLoader;
@@ -16,7 +16,9 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.morimori.bettergamemenu.BetterGameMenu;
 import net.morimori.bettergamemenu.integration.ModMenuIntegration;
+import net.morimori.bettergamemenu.utils.WorldUtils;
 
 public class BetterGameMenuScreen extends PauseScreen {
     private static final ResourceLocation WIDGETS = new ResourceLocation(BetterGameMenu.MODID, "textures/gui/widgets.png");
@@ -76,7 +78,7 @@ public class BetterGameMenuScreen extends PauseScreen {
         else
             shareToLan.active = isNonOpenLan();
 
-        Button button1 = (Button) this.addRenderableWidget(new Button(this.width / 2 - 102, this.height / 4 + 120 + -16, 204, 20, new TranslatableComponent("menu.returnToMenu"), (buttonx) -> {
+        Button button1 = this.addRenderableWidget(new Button(this.width / 2 - 102, this.height / 4 + 120 + -16, 204, 20, new TranslatableComponent("menu.returnToMenu"), (buttonx) -> {
             boolean bl = this.minecraft.isLocalServer();
             boolean bl2 = this.minecraft.isConnectedToRealms();
             buttonx.active = false;
@@ -107,12 +109,12 @@ public class BetterGameMenuScreen extends PauseScreen {
             modButton.active = modButton.visible = isModOptions();
         }
 
-        Button rejoinButton = this.addRenderableWidget(new ImageButton(button1.x + button1.getWidth() + 8, button1.y, 20, 20, 0, 0, 20, WIDGETS, n -> {
+        Button rejoinButton = this.addRenderableWidget(new ImageButton(button1.x + button1.getWidth() + 8, button1.y, 20, 20, this.minecraft.isLocalServer() ? 0 : 20, 0, 20, WIDGETS, 256, 256, n -> {
             String id = "";
             ServerData serverData = null;
             boolean bl = this.minecraft.isLocalServer();
             if (bl)
-                id = minecraft.getSingleplayerServer().storageSource.getLevelId();
+                id = WorldUtils.getWorldId();
             boolean bl2 = this.minecraft.isConnectedToRealms();
             if (!bl && !bl2)
                 serverData = this.minecraft.getCurrentServer();
@@ -128,7 +130,7 @@ public class BetterGameMenuScreen extends PauseScreen {
             TitleScreen titleScreen = new TitleScreen();
             if (bl) {
                 try {
-                    this.minecraft.loadLevel(id);
+                    WorldUtils.load(id);
                 } catch (Exception ex) {
                     this.minecraft.setScreen(titleScreen);
                 }
@@ -136,13 +138,13 @@ public class BetterGameMenuScreen extends PauseScreen {
                 this.minecraft.setScreen(new RealmsMainScreen(titleScreen));
             } else {
                 try {
-                    ConnectScreen.startConnecting(this, minecraft, ServerAddress.parseString(serverData.ip), serverData);
+                    WorldUtils.joinServer(new JoinMultiplayerScreen(titleScreen), serverData);
                 } catch (Exception ex) {
                     this.minecraft.setScreen(new JoinMultiplayerScreen(titleScreen));
                 }
             }
 
-        }));
+        }, (button, poseStack, x, y) -> this.renderTooltip(poseStack, this.minecraft.font.split(new TranslatableComponent("gui.button.rejoin"), Math.max(this.width / 2 - 43, 170)), x, y), new TranslatableComponent("gui.button.rejoin")));
         rejoinButton.active = rejoinButton.visible = isRejoinButton();
         if (isModOptions()) {
             //    if (isShowUpdate())
